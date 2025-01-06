@@ -42,6 +42,9 @@ def generate_amortization_schedule(principal, annual_rate, years, monthly_paymen
 # Streamlit App
 st.title("Simple Interest Loan Calculator")
 
+# Add dedication
+st.write("**Developed by Maher Alerwi, to Faisal, his beloved brother.**")
+
 # Toggle to select calculation mode
 calculation_mode = st.radio("Choose Calculation Mode:", ["Calculate Monthly Payment", "Calculate Loan Amount"])
 
