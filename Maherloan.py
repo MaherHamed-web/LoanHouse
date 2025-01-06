@@ -62,30 +62,11 @@ def calculate_loan_amount(monthly_payment, annual_rate, years):
     total_loan_cost = principal + total_interest
     return principal, total_interest, total_loan_cost
 
-# Function to generate amortization schedule
-def generate_amortization_schedule(principal, annual_rate, years, monthly_payment):
-    total_months = years * 12
-    monthly_interest = (principal * (annual_rate / 100)) / total_months
-    balance = principal
-    schedule = []
-
-    for month in range(1, total_months + 1):
-        interest_payment = monthly_interest
-        principal_payment = monthly_payment - interest_payment
-        balance -= principal_payment
-        schedule.append({
-            "Month": month,
-            "Payment": monthly_payment,
-            "Principal": principal_payment,
-            "Interest": interest_payment,
-            "Balance": max(balance, 0)
-        })
-
-    return pd.DataFrame(schedule)
-
 # Streamlit App
 # Language Toggle
-language = st.radio("Select Language / اختر اللغة:", ["العربية", "English"], index=0)
+language = st.radio("Select Language / اختر اللغة:", ["العربية", "English"], index=
+
+0)
 lang = "ar" if language == "العربية" else "en"
 
 # Titles and Dedication
@@ -132,27 +113,54 @@ if calculation_mode == translations[lang]["calculate_monthly_payment"]:
     plt.title(translations[lang]["loan_summary"])
     st.pyplot(plt)
 
-    # Amortization Schedule
-    st.subheader(translations[lang]["amortization_schedule"])
-    schedule = generate_amortization_schedule(principal, interest_rate, loan_term, monthly_payment)
-    st.dataframe(schedule)
-
-    # Allow user to download the schedule
-    csv = schedule.to_csv(index=False)
-    st.download_button(translations[lang]["download_csv"], data=csv, file_name="amortization_schedule.csv", mime="text/csv")
-
 else:
     # User Inputs for Loan Amount Calculation
     st.subheader(translations[lang]["calculate_loan_amount"])
     monthly_payment = st.number_input(translations[lang]["desired_monthly_payment"], value=1500, step=100)
+    government_support = st.checkbox(translations[lang]["government_support"])
+    down_payment = st.number_input(translations[lang]["down_payment"], value=0, step=1000)
     interest_rate = st.number_input(translations[lang]["interest_rate"], value=1.0, step=0.1)
     loan_term = st.slider(translations[lang]["loan_term"], 1, 30, 5)
 
-    # Calculate Loan Details
-    principal, total_interest, total_loan_cost = calculate_loan_amount(monthly_payment, interest_rate, loan_term)
+    # Calculate Loan Amount
+    # Adjust the principal based on government support and down payment
+    adjusted_principal = monthly_payment * loan_term * 12
+    principal = adjusted_principal + (100000 if government_support else 0) - down_payment
+    # Calculate total interest on the adjusted principal
+    total_interest = principal * interest_rate
+    st.write(f"Your calculated principal is{total_interest}")
+
+Let me adjust and complete this for better clarity and functionality.
+
+Here is the fixed and updated code to handle the **Government Support** and **Down Payment** for the "Calculate Loan Amount" mode properly:
+
+---
+
+### Fixed and Complete Code:
+
+```python
+if calculation_mode == translations[lang]["calculate_loan_amount"]:
+    # User Inputs for Loan Amount Calculation
+    st.subheader(translations[lang]["calculate_loan_amount"])
+    monthly_payment = st.number_input(translations[lang]["desired_monthly_payment"], value=1500, step=100)
+    government_support = st.checkbox(translations[lang]["government_support"])
+    down_payment = st.number_input(translations[lang]["down_payment"], value=0, step=1000)
+    interest_rate = st.number_input(translations[lang]["interest_rate"], value=1.0, step=0.1)
+    loan_term = st.slider(translations[lang]["loan_term"], 1, 30, 5)
+
+    # Adjust Loan Amount with Government Support and Down Payment
+    total_months = loan_term * 12
+    total_interest_rate = (interest_rate / 100) * loan_term
+    base_principal = monthly_payment * total_months / (1 + total_interest_rate)
+
+    # Add government support and down payment
+    principal = base_principal + down_payment - (100000 if government_support else 0)
+
+    # Calculate total interest and total loan cost
+    total_interest = principal * total_interest_rate
+    total_loan_cost = principal + total_interest
 
     # Display Results
-    st.write(f"{translations[lang]['desired_monthly_payment']}: ${monthly_payment:,.2f}")
     st.write(f"{translations[lang]['principal']}: ${principal:,.2f}")
     st.write(f"{translations[lang]['total_interest']}: ${total_interest:,.2f}")
     st.write(f"{translations[lang]['total_loan_cost']}: ${total_loan_cost:,.2f}")
