@@ -18,6 +18,27 @@ def calculate_loan_amount(monthly_payment, annual_rate, years):
     total_loan_cost = principal + total_interest
     return principal, total_interest, total_loan_cost
 
+# Function to generate amortization schedule
+def generate_amortization_schedule(principal, annual_rate, years, monthly_payment):
+    total_months = years * 12
+    monthly_interest = (principal * (annual_rate / 100)) / total_months
+    balance = principal
+    schedule = []
+
+    for month in range(1, total_months + 1):
+        interest_payment = monthly_interest
+        principal_payment = monthly_payment - interest_payment
+        balance -= principal_payment
+        schedule.append({
+            "Month": month,
+            "Payment": monthly_payment,
+            "Principal": principal_payment,
+            "Interest": interest_payment,
+            "Balance": max(balance, 0)
+        })
+
+    return pd.DataFrame(schedule)
+
 # Streamlit App
 st.title("Simple Interest Loan Calculator")
 
