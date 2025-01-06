@@ -11,6 +11,7 @@ translations = {
         "calculate_monthly_payment": "حساب القسط الشهري",
         "calculate_loan_amount": "حساب مبلغ القرض",
         "loan_amount": "مبلغ القرض ($)",
+        "down_payment": "الدفعة المقدمة ($)",
         "interest_rate": "نسبة الفائدة السنوية (%)",
         "loan_term": "مدة القرض (بالسنوات)",
         "monthly_payment": "القسط الشهري ($)",
@@ -29,6 +30,7 @@ translations = {
         "calculate_monthly_payment": "Calculate Monthly Payment",
         "calculate_loan_amount": "Calculate Loan Amount",
         "loan_amount": "Loan Amount ($)",
+        "down_payment": "Down Payment ($)",
         "interest_rate": "Interest Rate (Annual %)",
         "loan_term": "Loan Term (Years)",
         "monthly_payment": "Monthly Payment ($)",
@@ -98,14 +100,18 @@ if calculation_mode == translations[lang]["calculate_monthly_payment"]:
     # User Inputs for Monthly Payment Calculation
     st.subheader(translations[lang]["calculate_monthly_payment"])
     loan_amount = st.number_input(translations[lang]["loan_amount"], value=100000, step=1000)
+    down_payment = st.number_input(translations[lang]["down_payment"], value=0, step=1000)
     interest_rate = st.number_input(translations[lang]["interest_rate"], value=1.0, step=0.1)
     loan_term = st.slider(translations[lang]["loan_term"], 1, 30, 5)
 
+    # Adjust principal based on down payment
+    principal = loan_amount - down_payment
+
     # Calculate Loan Details
-    total_interest, total_loan_cost, monthly_payment = calculate_simple_interest(loan_amount, interest_rate, loan_term)
+    total_interest, total_loan_cost, monthly_payment = calculate_simple_interest(principal, interest_rate, loan_term)
 
     # Display Results
-    st.write(f"{translations[lang]['principal']}: ${loan_amount:,.2f}")
+    st.write(f"{translations[lang]['principal']}: ${principal:,.2f}")
     st.write(f"{translations[lang]['total_interest']}: ${total_interest:,.2f}")
     st.write(f"{translations[lang]['total_loan_cost']}: ${total_loan_cost:,.2f}")
     st.write(f"{translations[lang]['monthly_payment']}: ${monthly_payment:,.2f}")
@@ -113,7 +119,7 @@ if calculation_mode == translations[lang]["calculate_monthly_payment"]:
     # Loan Summary Pie Chart
     st.subheader(translations[lang]["loan_summary"])
     labels = [translations[lang]["principal"], translations[lang]["total_interest"]]
-    sizes = [loan_amount, total_interest]
+    sizes = [principal, total_interest]
     plt.figure(figsize=(6, 6))
     plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=["#1f77b4", "#ff7f0e"])
     plt.title(translations[lang]["loan_summary"])
@@ -121,7 +127,7 @@ if calculation_mode == translations[lang]["calculate_monthly_payment"]:
 
     # Amortization Schedule
     st.subheader(translations[lang]["amortization_schedule"])
-    schedule = generate_amortization_schedule(loan_amount, interest_rate, loan_term, monthly_payment)
+    schedule = generate_amortization_schedule(principal, interest_rate, loan_term, monthly_payment)
     st.dataframe(schedule)
 
     # Allow user to download the schedule
