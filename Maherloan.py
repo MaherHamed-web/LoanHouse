@@ -9,10 +9,10 @@ translations = {
         "dedication": "تم التطوير بواسطة ماهر العروي، إلى فيصل، أخيه الحبيب.",
         "calculation_mode": "اختر وضع الحساب:",
         "calculate_monthly_payment": "حساب القسط الشهري",
-        "calculate_loan_amount": "حساب مبلغ القرض",
+        "calculate_loan_amount": "حساب سعر المنزل الذي يمكن شراؤه",
         "house_price": "سعر المنزل ($)",
         "down_payment": "الدفعة المقدمة ($)",
-        "government_support": "الدعم الحكومي (خصم 100,000$)",
+        "government_support": "الدعم الحكومي (إضافة 100,000$)",
         "interest_rate": "نسبة الفائدة السنوية (%)",
         "loan_term": "مدة القرض (بالسنوات)",
         "monthly_payment": "القسط الشهري ($)",
@@ -29,10 +29,10 @@ translations = {
         "dedication": "Developed by Maher Alerwi, to Faisal, his beloved brother.",
         "calculation_mode": "Choose Calculation Mode:",
         "calculate_monthly_payment": "Calculate Monthly Payment",
-        "calculate_loan_amount": "Calculate Loan Amount",
+        "calculate_loan_amount": "Calculate House Price You Can Buy",
         "house_price": "House Price ($)",
         "down_payment": "Down Payment ($)",
-        "government_support": "Government Support (Deduct $100,000)",
+        "government_support": "Government Support (Add $100,000)",
         "interest_rate": "Interest Rate (Annual %)",
         "loan_term": "Loan Term (Years)",
         "monthly_payment": "Monthly Payment ($)",
@@ -120,27 +120,28 @@ else:
     interest_rate = st.number_input(translations[lang]["interest_rate"], value=1.0, step=0.1)
     loan_term = st.slider(translations[lang]["loan_term"], 1, 30, 5)
 
-    # Adjust Loan Amount with Government Support and Down Payment
+    # Calculate base principal based on monthly payment
     total_months = loan_term * 12
     total_interest_rate = (interest_rate / 100) * loan_term
     base_principal = monthly_payment * total_months / (1 + total_interest_rate)
 
-    # Add government support and down payment
-    principal = base_principal + down_payment - (100000 if government_support else 0)
+    # Adjust the total house price based on government support and down payment
+    house_price = base_principal + down_payment + (100000 if government_support else 0)
 
     # Calculate total interest and total loan cost
-    total_interest = principal * total_interest_rate
-    total_loan_cost = principal + total_interest
+    total_interest = base_principal * total_interest_rate
+    total_loan_cost = base_principal + total_interest
 
     # Display Results
-    st.write(f"{translations[lang]['principal']}: ${principal:,.2f}")
+    st.write(f"{translations[lang]['house_price']}: ${house_price:,.2f}")
+    st.write(f"{translations[lang]['principal']}: ${base_principal:,.2f}")
     st.write(f"{translations[lang]['total_interest']}: ${total_interest:,.2f}")
     st.write(f"{translations[lang]['total_loan_cost']}: ${total_loan_cost:,.2f}")
 
     # Loan Summary Pie Chart
     st.subheader(translations[lang]["loan_summary"])
     labels = [translations[lang]["principal"], translations[lang]["total_interest"]]
-    sizes = [principal, total_interest]
+    sizes = [base_principal, total_interest]
     plt.figure(figsize=(6, 6))
     plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=["#1f77b4", "#ff7f0e"])
     plt.title(translations[lang]["loan_summary"])
