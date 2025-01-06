@@ -10,8 +10,9 @@ translations = {
         "calculation_mode": "اختر وضع الحساب:",
         "calculate_monthly_payment": "حساب القسط الشهري",
         "calculate_loan_amount": "حساب مبلغ القرض",
-        "loan_amount": "مبلغ القرض ($)",
+        "house_price": "سعر المنزل ($)",
         "down_payment": "الدفعة المقدمة ($)",
+        "government_support": "الدعم الحكومي (خصم 100,000$)",
         "interest_rate": "نسبة الفائدة السنوية (%)",
         "loan_term": "مدة القرض (بالسنوات)",
         "monthly_payment": "القسط الشهري ($)",
@@ -29,8 +30,9 @@ translations = {
         "calculation_mode": "Choose Calculation Mode:",
         "calculate_monthly_payment": "Calculate Monthly Payment",
         "calculate_loan_amount": "Calculate Loan Amount",
-        "loan_amount": "Loan Amount ($)",
+        "house_price": "House Price ($)",
         "down_payment": "Down Payment ($)",
+        "government_support": "Government Support (Deduct $100,000)",
         "interest_rate": "Interest Rate (Annual %)",
         "loan_term": "Loan Term (Years)",
         "monthly_payment": "Monthly Payment ($)",
@@ -99,13 +101,18 @@ calculation_mode = st.radio(translations[lang]["calculation_mode"], [
 if calculation_mode == translations[lang]["calculate_monthly_payment"]:
     # User Inputs for Monthly Payment Calculation
     st.subheader(translations[lang]["calculate_monthly_payment"])
-    loan_amount = st.number_input(translations[lang]["loan_amount"], value=100000, step=1000)
+    house_price = st.number_input(translations[lang]["house_price"], value=300000, step=1000)
+    government_support = st.checkbox(translations[lang]["government_support"])
     down_payment = st.number_input(translations[lang]["down_payment"], value=0, step=1000)
     interest_rate = st.number_input(translations[lang]["interest_rate"], value=1.0, step=0.1)
     loan_term = st.slider(translations[lang]["loan_term"], 1, 30, 5)
 
-    # Adjust principal based on down payment
-    principal = loan_amount - down_payment
+    # Adjust house price for government support
+    if government_support:
+        house_price -= 100000
+
+    # Adjust principal based on down payment and government support
+    principal = house_price - down_payment
 
     # Calculate Loan Details
     total_interest, total_loan_cost, monthly_payment = calculate_simple_interest(principal, interest_rate, loan_term)
