@@ -64,9 +64,7 @@ def calculate_loan_amount(monthly_payment, annual_rate, years):
 
 # Streamlit App
 # Language Toggle
-language = st.radio("Select Language / اختر اللغة:", ["العربية", "English"], index=
-
-0)
+language = st.radio("Select Language / اختر اللغة:", ["العربية", "English"], index=0)
 lang = "ar" if language == "العربية" else "en"
 
 # Titles and Dedication
@@ -114,32 +112,6 @@ if calculation_mode == translations[lang]["calculate_monthly_payment"]:
     st.pyplot(plt)
 
 else:
-    # User Inputs for Loan Amount Calculation
-    st.subheader(translations[lang]["calculate_loan_amount"])
-    monthly_payment = st.number_input(translations[lang]["desired_monthly_payment"], value=1500, step=100)
-    government_support = st.checkbox(translations[lang]["government_support"])
-    down_payment = st.number_input(translations[lang]["down_payment"], value=0, step=1000)
-    interest_rate = st.number_input(translations[lang]["interest_rate"], value=1.0, step=0.1)
-    loan_term = st.slider(translations[lang]["loan_term"], 1, 30, 5)
-
-    # Calculate Loan Amount
-    # Adjust the principal based on government support and down payment
-    adjusted_principal = monthly_payment * loan_term * 12
-    principal = adjusted_principal + (100000 if government_support else 0) - down_payment
-    # Calculate total interest on the adjusted principal
-    total_interest = principal * interest_rate
-    st.write(f"Your calculated principal is{total_interest}")
-
-Let me adjust and complete this for better clarity and functionality.
-
-Here is the fixed and updated code to handle the **Government Support** and **Down Payment** for the "Calculate Loan Amount" mode properly:
-
----
-
-### Fixed and Complete Code:
-
-```python
-if calculation_mode == translations[lang]["calculate_loan_amount"]:
     # User Inputs for Loan Amount Calculation
     st.subheader(translations[lang]["calculate_loan_amount"])
     monthly_payment = st.number_input(translations[lang]["desired_monthly_payment"], value=1500, step=100)
