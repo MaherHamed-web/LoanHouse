@@ -5,22 +5,22 @@ import matplotlib.pyplot as plt
 # Translation Dictionary
 translations = {
     "ar": {
-        "title": "حاسبة القرض البسيط",
+        "title": "حاسبة القرض السكني",
         "dedication": "تم التطوير بواسطة ماهر العروي، إلى فيصل، أخيه الحبيب.",
         "calculation_mode": "اختر وضع الحساب:",
         "calculate_monthly_payment": "حساب القسط الشهري",
-        "calculate_loan_amount": "حساب سعر المنزل الذي يمكن شراؤه",
+        "calculate_loan_amount": "حساب بلغ القرض",
         "house_price": "سعر المنزل ($)",
         "down_payment": "الدفعة المقدمة ($)",
-        "government_support": "الدعم الحكومي (إضافة 100,000$)",
+        "government_support": "الدعم الحكومي سكني (إضافة 100,000$)",
         "interest_rate": "نسبة الفائدة السنوية (%)",
         "loan_term": "مدة القرض (بالسنوات)",
         "monthly_payment": "القسط الشهري ($)",
         "desired_monthly_payment": "القسط الشهري المطلوب ($)",
-        "principal": "المبلغ الأساسي",
+        "principal": "مبلغ القرض",
         "total_interest": "إجمالي الفائدة",
         "total_loan_cost": "التكلفة الإجمالية للقرض",
-        "loan_summary": "ملخص القرض: المبلغ الأساسي مقابل الفائدة",
+        "loan_summary": "ملخص القرض: مبلغ القرض مقابل الفائدة",
         "amortization_schedule": "جدول السداد",
         "download_csv": "تحميل جدول السداد كملف CSV"
     },
@@ -37,10 +37,10 @@ translations = {
         "loan_term": "Loan Term (Years)",
         "monthly_payment": "Monthly Payment ($)",
         "desired_monthly_payment": "Desired Monthly Payment ($)",
-        "principal": "Principal",
+        "principal": "Loan Amount",
         "total_interest": "Total Interest",
         "total_loan_cost": "Total Loan Cost",
-        "loan_summary": "Loan Summary: Principal vs Interest",
+        "loan_summary": "Loan Summary: Loan Amount vs Interest",
         "amortization_schedule": "Amortization Schedule",
         "download_csv": "Download Amortization Schedule as CSV"
     }
